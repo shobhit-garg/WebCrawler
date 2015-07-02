@@ -16,15 +16,15 @@ import java.util.Date;
 public class MultithreadedCrawlerLogic {
     
     private static final Logger logger = WebCrawlerLogger.getLoggerInstance();
-    private int MAX_PAGES;
+    private int max_pages;
     private Set<String> pagesVisited = new HashSet<String>();
     private Queue<String> pagesToVisit = new LinkedList<String>();
-    
+    private static final long MAX_WAIT_TIME = 240000; //in milliseconds(4 mins)
     
     public MultithreadedCrawlerLogic(String url,int maxPages)
     {
         addUrlToVisit(url);
-        this.MAX_PAGES = maxPages;
+        this.max_pages = maxPages;
     }
     private String getNextUrlToCrawl()
     {
@@ -59,7 +59,7 @@ public class MultithreadedCrawlerLogic {
         String currentUrl = null;
         synchronized(this)
         {
-           if(pagesVisited.size() >= MAX_PAGES)
+           if(pagesVisited.size() >= max_pages)
            {
                break;
            }
@@ -80,14 +80,14 @@ public class MultithreadedCrawlerLogic {
                //for this check the size of pageVisited. If it is same from the last 4 mins that means no thread is visiting any page.
                //so we should break the wait loop too.
                long after_timestamp = new Date().getTime();
-               if(after_timestamp - before_timestamp > 240000 && before_size == pagesVisited.size())
+               if(after_timestamp - before_timestamp > MAX_WAIT_TIME && before_size == pagesVisited.size())
                {
                    logger.log(Level.WARNING, "PageVisited is not getting popluated from the last 4 mins");
                    break;
                }
            }
            //the time this thread get the control, this might already be done so better check it
-           if(pagesVisited.size() >= MAX_PAGES)
+           if(pagesVisited.size() >= max_pages)
            {
                break;
            }
