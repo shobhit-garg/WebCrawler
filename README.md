@@ -14,7 +14,7 @@ Please change these settings according to your need.
 2.PageFetcher.java : Contains the code for fetching the webpage over the network. 
   For doing this is class is importing Jsoup library.
   
-3.WebCrawlerLogger.java : For returning the logger instance.This creates a file in logs/ folder which contains all the logs.
+3.WebCrawlerLogger.java : For returning the logger instance.This creates a file in logs/ folder which contains all the logs. 
 
 4.SingleThreadedCrawlerLogic.java : If you want to run crawler as a single threaded application, 
   the logic related to it present here.
